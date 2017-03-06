@@ -1,0 +1,83 @@
+<div class="row">
+	<div class="col-xs-12" style="padding-top: 25%;padding-bottom:10%;">
+		<img src="/mobile/images/img/test.png" class="center-block img-responsive" width="55%">
+	</div>
+</div>
+
+<form role="form" action="user.php" method="post" onSubmit="return false">
+	<div class="row" style="margin-top: 20%;">
+		<div class="col-xs-10 col-xs-offset-1">
+			<div class="input-group" style="border-bottom: 1px solid #ddd;">
+				<span class="input-group-addon" style="border: 0;background: white;">
+					<span class="glyphicon glyphicon-user tu"></span></span>
+				<input type="text" name="username" class="form-control " value="" placeholder="请输入卡正面的卡号"	style="border: 0; height: 40px;">
+			</div>
+			<!--<br>-->
+
+			<div class="input-group">
+				<span class="input-group-addon" style="border: 0;background: white;"><span class="glyphicon glyphicon-lock tu"></span></span>
+				<input type="password" name="password" class="form-control" placeholder="请输入密码"	style="border: 0; height: 40px;">
+			</div>
+			<!-- <br>-->
+		</div>
+		<div class="col-xs-10 col-xs-offset-1" style="margin-top: 10px;">
+			<div class="input-group" style="border-bottom: 1px solid #ddd;">
+				<span class="input-group-addon" style="border: 0;background: white;">
+				<span class="glyphicon glyphicon-user tu" style="visibility: hidden;"></span></span>
+				<input type="text" name="sequence" class="form-control " value="" placeholder="请输入卡背面的序列号"	style="border: 0; height: 40px;">
+			</div>
+			<!--<br>-->
+
+			<div class="input-group" style="position: relative;">
+				<span class="input-group-addon" style="border: 0;background: white;"><span class="glyphicon glyphicon-lock tu" style="visibility: hidden;"></span></span>
+				<input type="text" name="captcha" class="form-control" placeholder="请输入图片中的结果"	style="border: 0; height: 40px;">
+				<img class="code-img" src="" alt="点击刷新" style="position: absolute;width: 80px;height: 30px;right: 10px;top: 4px;z-index: 11;" />
+			</div>
+			<!-- <br>-->
+		</div>
+		
+	</div>
+	<div class="row" style="margin-top:5%;">
+		<div class="col-xs-10 col-xs-offset-1">
+			<input type="hidden" name="back_act" value="{$back_act}">
+			<button class="btn btn-block" style="background: url(/mobile/images/img/button.png) no-repeat;background-size:100% 100% ;color: white;">登 录</button>
+		</div>
+	</div>
+	<div class="row" style="margin-top:10%;">
+		<div class="col-xs-10 col-xs-offset-1">
+			<img src="/mobile/images/img/enjoy.png" class="img-responsive">
+		</div>
+	</div>
+</form>
+
+<script>
+	jQuery('.code-img').attr("src",web_url+'/mobile/captcha.php?'+Math.random());
+	jQuery('.code-img').on('click',function(){
+				$(this).attr("src",web_url+'/mobile/captcha.php?'+Math.random());
+			});
+	jQuery('.col-xs-offset-1').on('tap', '.btn-block', function(){
+		var username = jQuery('input[name=username]').val();
+		var password = jQuery('input[name=password]').val();
+		var sequence = jQuery("input[name='sequence']").val();
+		var captcha =  jQuery("input[name='captcha']").val();
+		if (jQuery.isEmptyObject(username) == true){
+			mui.alert('卡号不能为空');
+			return false;
+		}
+		if (jQuery.isEmptyObject(password) == true){
+			mui.alert('密码不能为空');
+			return false;
+		}
+		jQuery.ajaxJsonp(web_url+"/mobile/userAuth.php",{act:'actLogin',username:username,password:password,sequence: sequence,captcha: captcha,source:1},function(data){
+			if(data.state == 'true'){
+				localStorage.user_id = data.data.user_id;
+				localStorage.user_name = data.data.user_name;
+				jQuery.jumpTo('index/jy_index.html');
+			}else{
+				mui.alert(data.message);
+			}			
+		},true);
+	});
+	
+
+</script>

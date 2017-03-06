@@ -1,0 +1,20 @@
+{{each data as val}}
+<li class="mui-table-view-cell address">
+    <div class="mui-slider-right mui-disabled">
+        <a class="mui-btn mui-btn-yellow shouhuo_edit" data-address-id="{{val.address_id}}" href="#change_adress">编辑</a>
+        <a class="mui-btn mui-btn-red shouhuo_remove" data-address-id="{{val.address_id}}">删除</a>
+    </div>
+    <div class="mui-slider-handle">
+        <div class="mui-table">
+            <div class="mui-table-cell">
+                <h4 class="mui-ellipsis margin_bottom_10"><span class="shouhuo_name">{{val.consignee}}</span><span>{{val.mobile}}</span>
+                    <div class="mui-input-row mui-radio def_radio" {{if onlyCountry==1}}style="display: none"{{/if}}>
+                        <label>{{if val.selected==1}}默认地址{{else}}设为默认{{/if}}</label><input name="radio1" type="radio" value="{{val.address_id}}" {{if val.selected==1}}checked{{/if}}>
+                    </div>
+                </h4>
+                <h5>{{val.country_cn}}{{val.province_cn}}{{val.address}}</h5>
+            </div>
+        </div>
+    </div>
+</li>
+{{/each}}
